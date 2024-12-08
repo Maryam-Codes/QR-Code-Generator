@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e; /* Black */
+            color: #ecf0f1; /* Light Gray */
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #27ae60; /* Green */
+            color: #ffffff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: #1e1e1e; /* Black */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.1em;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #27ae60; /* Green */
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="color"],
+        select,
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #27ae60; /* Green */
+            border-radius: 4px;
+            background-color: #1e1e1e; /* Black */
+            color: #ecf0f1; /* Light Gray */
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #27ae60; /* Green */
+            color: #ffffff;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2ecc71; /* Lighter Green */
+        }
+
+        .qr-code-display {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .qr-code-display img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #27ae60; /* Green */
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 2em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>QR Code Generator</h1>
+    </header>
+
+    <div class="container">
+        <form action="/generate_qr" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="text">Enter Text / URL:</label>
+                <input type="text" name="text" id="text" required>
+            </div>
+
+            <div class="form-group">
+                <label for="foreground_color">Foreground Color:</label>
+                <input type="color" name="foreground_color" id="foreground_color" value="#000000">
+            </div>
+
+            <div class="form-group">
+                <label for="background_color">Background Color:</label>
+                <input type="color" name="background_color" id="background_color" value="#FFFF00">
+            </div>
+
+            <div class="form-group">
+                <label for="size">Size:</label>
+                <input type="number" name="size" id="size" value="10" min="1" max="20">
+            </div>
+
+            <div class="form-group">
+                <label for="shape">Shape of QR Code:</label>
+                <select name="shape">
+                    <option value="circle">Circle</option>
+                    <option value="triangle">Triangle</option>
+                    <option value="square">Square</option>
+                    <option value="star">Star</option>
+                </select>
+                
+            </div>
+
+            <div class="form-group">
+                <label for="logo">Upload Logo (Optional):</label>
+                <input type="file" name="logo" id="logo">
+            </div>
+
+            <div class="form-group">
+                <label for="format">Image Format:</label>
+                <select name="format" id="format">
+                    <option value="PNG">PNG</option>
+                    <option value="JPEG">JPEG</option>
+                    <option value="GIF">GIF</option>
+                </select>
+            </div>
+
+            <button type="submit">Generate QR Code</button>
+        </form>
+
+        {% if img_base64 %}
+        <div class="qr-code-display">
+            <h2>Your QR Code:</h2>
+            <img src="data:image/png;base64,{{ img_base64 }}" alt="QR Code">
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
